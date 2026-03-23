@@ -37,3 +37,18 @@ void trie_tree_wordlike<content>::insertStatement(content ctnts[]) {
 
     current->set_end(true);
 }
+
+template<typename content>
+bool trie_tree_wordlike<content>::isValid(content ctnts[]) {
+    ttw_node<content>* current = root;
+    for (content* info : ctnts) {
+        ttw_node<content>* child = findchild(current, info);
+        if (child == nullptr && !current->loopable) {
+            return false;
+        }
+
+        current = child;
+    }
+
+    return current->get_end();
+}
