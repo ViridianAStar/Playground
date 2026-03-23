@@ -24,7 +24,7 @@ void trie_tree_wordlike<content>::insertStatement(content ctnts[]) {
         ttw_node<content>* child = findchild(current, info);
 
         if (child != nullptr) {
-            ttw_node<content>* child = ttw_node<content>(info, current, false);
+            child = ttw_node<content>(info, current, false);
             child->set_parent() = current;
             current->add_child(child);
             if (loopable_info.contains(info)) {
