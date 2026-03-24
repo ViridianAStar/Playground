@@ -4,10 +4,24 @@
 
 #include "trie_tree_wordlike.h"
 
+#include <stdexcept>
+
 template<typename content>
 ttw_node<content> trie_tree_wordlike<content>::findchild(ttw_node<content> *node, const content ctnts) {
 
     for (ttw_node<content> item : *node->children) {
+        if (item.content == ctnts) {
+            return item;
+        }
+    }
+
+    return nullptr;
+}
+
+template<typename content>
+ttw_node<content> trie_tree_wordlike<content>::findloopable_child(ttw_node<content> *node, const content ctnts) {
+
+    for (ttw_node<content> item : *node->loopable_children) {
         if (item.content == ctnts) {
             return item;
         }
@@ -29,6 +43,16 @@ void trie_tree_wordlike<content>::insertStatement(content ctnts[]) {
             current->add_child(child);
             if (loopable_info.contains(info)) {
                 child->set_loopable(true);
+                content back_reference = allowed_loops.at(info);
+                ttw_node<content>* parent_traverse = child->get_parent();
+                while (parent_traverse->contents != back_reference && parent_traverse->get_parent() != nullptr) {
+                    parent_traverse = parent_traverse->get_parent();
+                }
+                if (parent_traverse->parent != nullptr) {
+                    child->add_loopable_child(parent_traverse);
+                } else {
+                    throw std::out_of_range("Cannot find the top of this node loop");
+                }
             }
         }
 
@@ -43,8 +67,15 @@ bool trie_tree_wordlike<content>::isValid(content ctnts[]) {
     ttw_node<content>* current = root;
     for (content* info : ctnts) {
         ttw_node<content>* child = findchild(current, info);
-        if (child == nullptr && !current->loopable) {
-            return false;
+
+        if (child == nullptr) {
+            if (!current->get_loopable()) {
+                return false;
+            }
+            child = current->get_loopable_child();
+            if (child == nullptr) {
+                return false;
+            }
         }
 
         current = child;

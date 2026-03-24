@@ -14,13 +14,13 @@
  */
 template<typename content>
 class ttw_node {
-private:
     ttw_node* parent;
     bool loopable = false;
-    std::pmr::vector<ttw_node*> children;
     bool end;
 public:
     content contents;
+    std::pmr::vector<ttw_node*> children;
+    std::pmr::vector<ttw_node*> loopable_children;
     /**
      *
      * @param lpbl boolean value to set for loopable
@@ -41,21 +41,27 @@ public:
      *
      * @param parent
      */
-    void set_parent(ttw_node<content>* parent) {this->parent = parent;}
+    void set_parent(ttw_node* parent) {this->parent = parent;}
+
+    void get_parent(ttw_node* parent) {this->parent = parent;}
 
     /**
      * Add children so you can build the data structure. Useful if you extend it on the fly.
      *
      * @param child
      */
-    void add_child(ttw_node<content>* child) {children.push_back(child);}
+    void add_child(ttw_node* child) {children.push_back(child);}
 
     /**
      * Remove children useful if allowable statements change
      *
      * @param child
      */
-    void remove_child(ttw_node<content>* child) {children.remove(child);}
+    void remove_child(ttw_node* child) {children.remove(child);}
+
+    void add_loopable_child(ttw_node* child) {loopable_children.push_back(child);}
+
+    void remove_loopable_child(ttw_node* child) {loopable_children.remove(child);}
 
     /**
      * Build a node
@@ -67,16 +73,18 @@ public:
     ttw_node(content ctnts, ttw_node* parent, const bool ends) : parent(parent), end(ends), contents(ctnts) {}
 };
 
-
 template<typename content>
 class trie_tree_wordlike {
-private:
     // value -10 integer by default can contain other types as children
     ttw_node<int> root = ttw_node<int>(-10, nullptr, false);
 
     ttw_node<content> findchild(ttw_node<content>* node, const content ctnts);
+    ttw_node<content> findloopable_child(ttw_node<content>* node, const content ctnts);
 
-     std::pmr::unordered_map<content, bool> loopable_info;
+    // last to first
+    std::pmr::unordered_map<content, content> allowed_loops;
+
+    std::pmr::unordered_map<content, bool> loopable_info;
     public:
         void insertStatement(content ctnts[]);
         bool isValid(content ctnts[]);
