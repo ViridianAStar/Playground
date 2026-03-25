@@ -82,30 +82,31 @@ public:
 };
 
 template<typename content>
-class trie_tree_wordlike {
-    // value -10 integer by default can contain other types as children
-    ttw_node<int> root = ttw_node<int>(-10, nullptr, false);
+class automaton_like_trie {
+
+    ttw_node<content> root = ttw_node<content>(content{}, nullptr, false);
 
     ttw_node<content> findchild(ttw_node<content>* node, const content ctnts);
     ttw_node<content> findloopable_child(ttw_node<content>* node, const content ctnts);
 
+    public:
     // last to first
     std::pmr::unordered_map<content, content> allowed_loops;
 
     std::pmr::unordered_map<content, bool> loopable_info;
-    public:
+
     /**
      * Insert a new statement into the structure defining a valid item
      * @param ctnts
      */
-    void insertStatement(content ctnts[]);
+    void insertStatement(const std::vector<content>& ctnts);
 
     /**
      * Determine an input content structures validity
      * @param ctnts
      * @return
      */
-    bool isValid(content ctnts[]);
+    bool isValid(const std::vector<content>& ctnts);
 };
 
 

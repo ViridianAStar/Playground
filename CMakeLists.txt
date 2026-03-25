@@ -4,7 +4,6 @@ project(Playground)
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(Playground main.cpp
-        Tree_Like/trie_tree_wordlike.cpp
-        Tree_Like/trie_tree_wordlike.h
-        Tree_Like/node_specs/ttw_node.cpp
-        Tree_Like/node_specs/ttw_node.h)
+        Tree_Like/automaton_like_trie.cpp
+        Tree_Like/automaton_like_trie.h
+        includes.h)

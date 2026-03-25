@@ -2,12 +2,12 @@
 // Created by bowma on 3/23/2026.
 //
 
-#include "trie_tree_wordlike.h"
+#include "automaton_like_trie.h"
 
 #include <stdexcept>
 
 template<typename content>
-ttw_node<content> trie_tree_wordlike<content>::findchild(ttw_node<content> *node, const content ctnts) {
+ttw_node<content> automaton_like_trie<content>::findchild(ttw_node<content> *node, const content ctnts) {
 
     for (ttw_node<content> item : *node->children) {
         if (item.content == ctnts) {
@@ -19,7 +19,7 @@ ttw_node<content> trie_tree_wordlike<content>::findchild(ttw_node<content> *node
 }
 
 template<typename content>
-ttw_node<content> trie_tree_wordlike<content>::findloopable_child(ttw_node<content> *node, const content ctnts) {
+ttw_node<content> automaton_like_trie<content>::findloopable_child(ttw_node<content> *node, const content ctnts) {
 
     for (ttw_node<content> item : *node->loopable_children) {
         if (item.content == ctnts) {
@@ -31,11 +31,11 @@ ttw_node<content> trie_tree_wordlike<content>::findloopable_child(ttw_node<conte
 }
 
 template<typename content>
-void trie_tree_wordlike<content>::insertStatement(content ctnts[]) {
-    ttw_node<content>* current = root;
+void automaton_like_trie<content>::insertStatement(const std::vector<content>& ctnts) {
+    ttw_node<content>* current = &root;
 
-    for (content* info : ctnts) {
-        ttw_node<content>* child = findchild(current, info);
+    for (content info : ctnts) {
+        ttw_node<content> child = findchild(current, info);
 
         if (child != nullptr) {
             child = ttw_node<content>(info, current, false);
@@ -63,8 +63,8 @@ void trie_tree_wordlike<content>::insertStatement(content ctnts[]) {
 }
 
 template<typename content>
-bool trie_tree_wordlike<content>::isValid(content ctnts[]) {
-    ttw_node<content>* current = root;
+bool automaton_like_trie<content>::isValid(const std::vector<content>& ctnts) {
+    ttw_node<content>* current = &root;
     for (content* info : ctnts) {
         ttw_node<content>* child = findchild(current, info);
 
