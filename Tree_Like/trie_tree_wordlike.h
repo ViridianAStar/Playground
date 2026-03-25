@@ -43,6 +43,10 @@ public:
      */
     void set_parent(ttw_node* parent) {this->parent = parent;}
 
+    /**
+     * Make it easier to get the parent out
+     * @param parent
+     */
     void get_parent(ttw_node* parent) {this->parent = parent;}
 
     /**
@@ -59,6 +63,10 @@ public:
      */
     void remove_child(ttw_node* child) {children.remove(child);}
 
+    /**
+     * Add loopable children to build the data structure.
+     * @param child
+     */
     void add_loopable_child(ttw_node* child) {loopable_children.push_back(child);}
 
     void remove_loopable_child(ttw_node* child) {loopable_children.remove(child);}
@@ -86,8 +94,18 @@ class trie_tree_wordlike {
 
     std::pmr::unordered_map<content, bool> loopable_info;
     public:
-        void insertStatement(content ctnts[]);
-        bool isValid(content ctnts[]);
+    /**
+     * Insert a new statement into the structure defining a valid item
+     * @param ctnts
+     */
+    void insertStatement(content ctnts[]);
+
+    /**
+     * Determine an input content structures validity
+     * @param ctnts
+     * @return
+     */
+    bool isValid(content ctnts[]);
 };
 
 
